@@ -8,8 +8,8 @@ class Base(so.DeclarativeBase):
     pass
 
 
-class Post(Base):
-    __tablename__ = 'posts'
+class Article(Base):
+    __tablename__ = 'articles'
 
     id: so.Mapped[str] = so.mapped_column(primary_key=True, default=lambda: str(uuid4()), index=True)
     title: so.Mapped[str]
