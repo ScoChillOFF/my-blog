@@ -1,7 +1,8 @@
 import sqlalchemy.orm as so
+import sqlalchemy as sa
 
 from uuid import uuid4
-from datetime import datetime, timezone
+import datetime
 
 
 class Base(so.DeclarativeBase):
@@ -14,4 +15,4 @@ class Article(Base):
     id: so.Mapped[str] = so.mapped_column(primary_key=True, default=lambda: str(uuid4()), index=True)
     title: so.Mapped[str]
     content: so.Mapped[str]
-    created_at: so.Mapped[datetime] = so.mapped_column(default=lambda: datetime.now(timezone.utc))
+    created_at: so.Mapped[datetime.datetime] = so.mapped_column(sa.DateTime(timezone=True), default=lambda: datetime.datetime.now(datetime.UTC))
