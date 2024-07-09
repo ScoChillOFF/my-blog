@@ -26,3 +26,9 @@ async def get_article(article_id: str, db_session: AsyncSession = Depends(get_db
     if not article:
         raise HTTPException(status_code=404, detail='not found')
     return article
+
+
+@app.get('/api/v1/articles', response_model=list[schemas.ArticleResponse])
+async def get_articles(db_session: AsyncSession = Depends(get_db_session)) -> list[models.Article]:
+    articles = await db.get_articles(db_session=db_session)
+    return articles
