@@ -22,3 +22,12 @@ async def get_articles(db_session: AsyncSession) -> list[models.Article]:
     result = await db_session.scalars(query)
     articles = result.all()
     return articles
+
+
+async def delete_article(article_id: str, db_session: AsyncSession) -> None:
+    article = await get_article(article_id=article_id, db_session=db_session)
+    if not article:
+        return
+    await db_session.delete(article)
+    await db_session.commit()
+    return

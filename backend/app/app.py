@@ -32,3 +32,9 @@ async def get_article(article_id: str, db_session: AsyncSession = Depends(get_db
 async def get_articles(db_session: AsyncSession = Depends(get_db_session)) -> list[models.Article]:
     articles = await db.get_articles(db_session=db_session)
     return articles
+
+
+@app.delete('/api/v1/articles/{article_id}')
+async def delete_article(article_id: str, db_session: AsyncSession = Depends(get_db_session)):
+    await db.delete_article(article_id=article_id, db_session=db_session)
+    return {'status': 'ok'}
