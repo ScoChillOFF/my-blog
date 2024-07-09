@@ -9,3 +9,8 @@ async def create_article(article_schema: schemas.Article, db_session: AsyncSessi
     await db_session.commit()
     await db_session.refresh(article)
     return article
+
+
+async def get_article(article_id: str, db_session: AsyncSession) -> models.Article:
+    article = await db_session.get(models.Article, article_id)
+    return article
