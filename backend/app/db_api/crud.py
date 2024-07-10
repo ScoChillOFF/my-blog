@@ -4,7 +4,7 @@ import sqlalchemy as sa
 from . import schemas, models
 
 
-async def create_article(article_schema: schemas.Article, db_session: AsyncSession) -> models.Article:
+async def create_article(article_schema: schemas.ArticleCreation, db_session: AsyncSession) -> models.Article:
     article = models.Article(**article_schema.model_dump())
     db_session.add(article)
     await db_session.commit()

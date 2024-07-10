@@ -3,22 +3,22 @@ from pydantic import BaseModel, ConfigDict
 from datetime import datetime
 
 
-class Article(BaseModel):
+class ArticleBase(BaseModel):
     title: str
     content: str
 
 
-class ArticleCreation(Article):
+class ArticleCreation(ArticleBase):
     pass
 
 
-class ArticleResponse(Article):
+class ArticleResponse(ArticleBase):
     id:str
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
 
 
-class ArticleUpdating(Article):
+class ArticleUpdating(ArticleBase):
     title: str | None = None
     content: str | None = None
