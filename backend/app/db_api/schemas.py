@@ -17,3 +17,8 @@ class ArticleResponse(Article):
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class ArticleUpdating(Article):
+    title: str | None = None
+    content: str | None = None

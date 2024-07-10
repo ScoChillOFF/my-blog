@@ -31,3 +31,18 @@ async def delete_article(article_id: str, db_session: AsyncSession) -> None:
     await db_session.delete(article)
     await db_session.commit()
     return
+
+
+async def update_article(article_id: str, article_schema: schemas.ArticleUpdating, db_session: AsyncSession) -> models.Article | None:
+    article = await get_article(article_id=article_id, db_session=db_session)
+    if not article:
+        return
+    
+    for attribute, value in article_schema.model_dump().items():
+        if value is not None:
+            setattr(article, attribute, value)
+    
+    db_session.add(article)
+    await db_session.commit()
+    return article
+    

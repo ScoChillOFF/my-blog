@@ -38,3 +38,11 @@ async def get_articles(db_session: AsyncSession = Depends(get_db_session)) -> li
 async def delete_article(article_id: str, db_session: AsyncSession = Depends(get_db_session)):
     await db.delete_article(article_id=article_id, db_session=db_session)
     return {'status': 'ok'}
+
+
+@app.put('/api/v1/articles/{article_id}', response_model=schemas.ArticleResponse)
+async def update_article(article_id: str, article_schema: schemas.ArticleUpdating, db_session: AsyncSession = Depends(get_db_session)):
+    article = await db.update_article(article_id=article_id, article_schema=article_schema, db_session=db_session)
+    if not article:
+        raise HTTPException(status_code=404, detail='not found')
+    return article
