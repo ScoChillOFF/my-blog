@@ -57,6 +57,7 @@ async def test_create_article(with_db):
         json={
             "title": "test_create_article_title",
             "content": "test_create_article_content",
+            "tags": []
         },
     )
     article = response.json()
@@ -102,6 +103,7 @@ def test_get_articles(with_db):
                 isinstance(article.get("title"), str),
                 isinstance(article.get("content"), str),
                 isinstance(article.get("created_at"), str),
+                article.get('tags') == []
             ]
         )
 
@@ -128,5 +130,6 @@ def test_update_article(with_db):
             article.get("title") == "test_title_1",
             article.get("content") == "test_change_content",
             isinstance(article.get("created_at"), str),
+            article.get('tags') == []
         ]
     )
