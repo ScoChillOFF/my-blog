@@ -1,6 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 import sqlalchemy as sa
 
+from datetime import datetime, timezone, timedelta
+
 from . import schemas, models
 
 
@@ -17,11 +19,19 @@ async def get_article(article_id: str, db_session: AsyncSession) -> models.Artic
     return article
 
 
-async def get_articles(db_session: AsyncSession) -> list[models.Article]:
+async def get_articles(db_session: AsyncSession, days_limit: int | None = None) -> list[models.Article]:
     query = sa.select(models.Article).order_by(models.Article.created_at.desc())
+    if days_limit is not None:
+        query = apply_days_limit(query, days_limit)
     result = await db_session.scalars(query)
     articles = result.all()
     return articles
+
+
+def apply_days_limit(query: sa.Select, days_limit: int) -> sa.Select:
+    converted_days = timedelta(days=days_limit)
+    current_date = datetime.now(tz=timezone.utc).date()
+    return query.where(models.Article.created_at >= current_date - converted_days)
 
 
 async def delete_article(article_id: str, db_session: AsyncSession) -> None:

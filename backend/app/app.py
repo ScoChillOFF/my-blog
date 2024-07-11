@@ -28,8 +28,8 @@ async def get_article(article_id: str, db_session: DBSession) -> models.Article:
 
 
 @app.get('/api/v1/articles', response_model=list[schemas.ArticleResponse])
-async def get_articles(db_session: DBSession) -> list[models.Article]:
-    articles = await db.get_articles(db_session=db_session)
+async def get_articles(db_session: DBSession, days_limit: int | None = None) -> list[models.Article]:
+    articles = await db.get_articles(db_session=db_session, days_limit=days_limit)
     return articles
 
 
