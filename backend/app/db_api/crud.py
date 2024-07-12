@@ -19,13 +19,20 @@ async def get_article(article_id: str, db_session: AsyncSession) -> models.Artic
     return article
 
 
-async def get_articles(db_session: AsyncSession, days_limit: int | None = None) -> list[models.Article]:
+async def get_articles(db_session: AsyncSession, days_limit: int | None = None, tag_names: list[str] | None = None) -> list[models.Article]:
     query = sa.select(models.Article).order_by(models.Article.created_at.desc())
     if days_limit is not None:
         query = apply_days_limit(query, days_limit)
+    if tag_names is not None:
+        query = apply_tags_filter(query, tag_names)
     result = await db_session.scalars(query)
     articles = result.all()
     return articles
+
+
+def apply_tags_filter(query: sa.Select, tag_names: list[str]) -> sa.Select:
+    query = query.join(models.Article.tags).filter(models.Tag.name.in_(tag_names)).distinct()
+    return query
 
 
 def apply_days_limit(query: sa.Select, days_limit: int) -> sa.Select:

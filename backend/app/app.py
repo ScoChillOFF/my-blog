@@ -1,4 +1,6 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
+
+from typing import Annotated
 
 from .dependencies import DBSession
 from .db_api import schemas, models
@@ -28,8 +30,8 @@ async def get_article(article_id: str, db_session: DBSession) -> models.Article:
 
 
 @app.get('/api/v1/articles', response_model=list[schemas.ArticleResponse])
-async def get_articles(db_session: DBSession, days_limit: int | None = None) -> list[models.Article]:
-    articles = await db.get_articles(db_session=db_session, days_limit=days_limit)
+async def get_articles(db_session: DBSession, days_limit: int | None = None, tags: Annotated[list[str] | None, Query()] = None) -> list[models.Article]:
+    articles = await db.get_articles(db_session=db_session, days_limit=days_limit, tag_names=tags)
     return articles
 
 
