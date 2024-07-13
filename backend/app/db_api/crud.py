@@ -7,11 +7,19 @@ from . import schemas, models
 
 
 async def create_article(article_schema: schemas.ArticleCreation, db_session: AsyncSession) -> models.Article:
-    article = models.Article(**article_schema.model_dump())
+    tags = await get_tags_by_names(db_session, article_schema.tags)
+    article = models.Article(title=article_schema.title, content=article_schema.content, tags=tags)
     db_session.add(article)
     await db_session.commit()
     await db_session.refresh(article)
     return article
+
+
+async def get_tags_by_names(db_session: AsyncSession, tag_names: list[str]) -> list[models.Tag]:
+    query = sa.select(models.Tag).where(models.Tag.name.in_(tag_names))
+    tags = (await db_session.scalars(query)).all()
+    print(tags)
+    return tags
 
 
 async def get_article(article_id: str, db_session: AsyncSession) -> models.Article:

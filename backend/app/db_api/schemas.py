@@ -17,6 +17,7 @@ class TagResponse(BaseModel):
 class ArticleCreation(BaseModel):
     title: str
     content: str
+    tags: list[str] | None
 
 
 class ArticleResponse(BaseModel):
