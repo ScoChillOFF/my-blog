@@ -2,7 +2,7 @@ from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 import pytest
 from fastapi.testclient import TestClient
 
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 
 from app.settings import settings
 from app.db_api import models
@@ -16,33 +16,17 @@ TestingSessionInstance = async_sessionmaker(engine, expire_on_commit=False)
 
 
 @pytest.fixture
-async def get_db_and_data(get_pre_db_data) -> None:
+async def get_db_and_data() -> None:
     async with engine.begin() as conn:
         await conn.run_sync(models.Base.metadata.drop_all)
         await conn.run_sync(models.Base.metadata.create_all)
-    async with TestingSessionInstance() as session:
-        data = get_pre_db_data
-        articles = [models.Article(**article_data) for article_data in data["articles"]]
-        tags = [models.Tag(**tag_data) for tag_data in data["tags"]]
-        articles[1].tags = [tags[0]]
-        articles[2].tags = [tags[0], tags[1]]
-        session.add_all([*articles, *tags])
-        await session.commit()
-
-    articles_data = data["articles"]
-    tags_data = data["tags"]
-    articles_data[0]["tags"] = []
-    articles_data[1]["tags"] = [tags_data[0]]
-    articles_data[2]["tags"] = [tags_data[0], tags_data[1]]
-    for article in articles_data:
-        article["created_at"] = (
-            article["created_at"].isoformat().replace("+00:00", "+03:00")
-        )
+    data = get_pre_db_data()
+    await fill_db_with_data(data)
+    update_data(data)
     return data
 
 
-@pytest.fixture
-def get_pre_db_data() -> dict[str, str]:
+def get_pre_db_data() -> dict[str, list]:
     articles_data = [
         {
             "id": "test_article_1",
@@ -68,6 +52,28 @@ def get_pre_db_data() -> dict[str, str]:
         {"id": "test_tag_2", "name": "tag_name_2"},
     ]
     return {"articles": articles_data, "tags": tags_data}
+
+
+async def fill_db_with_data(data) -> None:
+    async with TestingSessionInstance() as session:
+        articles = [models.Article(**article_data) for article_data in data["articles"]]
+        tags = [models.Tag(**tag_data) for tag_data in data["tags"]]
+        articles[1].tags = [tags[0]]
+        articles[2].tags = [tags[0], tags[1]]
+        session.add_all([*articles, *tags])
+        await session.commit()
+
+
+def update_data(data) -> None:
+    articles_data = data["articles"]
+    tags_data = data["tags"]
+    articles_data[0]["tags"] = []
+    articles_data[1]["tags"] = [tags_data[0]]
+    articles_data[2]["tags"] = [tags_data[0], tags_data[1]]
+    for article in articles_data:
+        article["created_at"] = (
+            article["created_at"].isoformat().replace("+00:00", "+03:00")
+        )
 
 
 async def override_get_db_session():
