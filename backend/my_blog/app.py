@@ -1,3 +1,6 @@
+import asyncio
+import sys
+
 from fastapi import FastAPI, HTTPException, Query
 
 from typing import Annotated
@@ -8,6 +11,11 @@ from .db_api import crud as db
 
 
 app = FastAPI()
+
+# Boilerplate for Windows
+if sys.platform == "win32":
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+# ------------------------
 
 
 @app.get('/api/v1/ping')
