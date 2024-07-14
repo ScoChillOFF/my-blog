@@ -135,9 +135,21 @@ def test_get_articles(get_db_and_data):
     assert response.status_code == 200
     assert articles == data["articles"]
 
-    # TODO: ////////////////////////////// tests for days limit ///////////////////////
-    #
-    # /////////////////////////////////////////////////////////////////////////////////
+    # By date
+    response = client.get("/api/v1/articles?days_limit=0")
+    articles = response.json()
+    assert response.status_code == 200
+    assert articles == data["articles"][0:1]
+
+    response = client.get("/api/v1/articles?days_limit=-1")
+    articles = response.json()
+    assert response.status_code == 200
+    assert articles == []
+
+    response = client.get("/api/v1/articles?days_limit=7")
+    articles = response.json()
+    assert response.status_code == 200
+    assert articles == data["articles"]
 
     # By single tag
     response = client.get("/api/v1/articles?tags=tag_name_1")
