@@ -4,10 +4,10 @@ from fastapi.testclient import TestClient
 
 from datetime import datetime, timedelta
 
-from app.settings import settings
-from app.db_api import models
-from app import app
-from app.dependencies import get_db_session
+from my_blog.settings import settings
+from my_blog.db_api import models
+from my_blog import app
+from my_blog.dependencies import get_db_session
 
 
 engine = create_async_engine(settings.get_test_db_url())

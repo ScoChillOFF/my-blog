@@ -1,1 +1,1 @@
-from app import app
+from my_blog import app

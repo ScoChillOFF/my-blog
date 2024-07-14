@@ -4,7 +4,7 @@ from sqlalchemy.exc import OperationalError
 
 import asyncio
 
-from app.settings import settings
+from my_blog.settings import settings
 
 
 engine = create_async_engine(settings.get_db_url())
