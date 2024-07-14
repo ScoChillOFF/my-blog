@@ -45,7 +45,7 @@ def apply_tags_filter(query: sa.Select, tag_names: list[str]) -> sa.Select:
 
 def apply_days_limit(query: sa.Select, days_limit: int) -> sa.Select:
     converted_days = timedelta(days=days_limit)
-    current_date = datetime.now(tz=timezone.utc).date()
+    current_date = datetime.now(tz=timezone.utc).astimezone().date()
     return query.where(models.Article.created_at >= current_date - converted_days)
 
 
