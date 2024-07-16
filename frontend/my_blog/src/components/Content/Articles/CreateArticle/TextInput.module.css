@@ -1,0 +1,8 @@
+.textInput {
+    display: block;
+    padding: 0 5px;
+    width: 100%;
+    font-family: "Montserrat", sans-serif;
+    font-size: 16px;
+    margin-bottom: 15px;
+}

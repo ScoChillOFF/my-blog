@@ -1,0 +1,14 @@
+.createForm {
+    font-family: "Montserrat", sans-serif;
+    padding: 15px;
+    border: 1px solid silver;
+}
+
+.createForm h3 {
+    margin-bottom: 20px; 
+}
+
+.createForm div {
+    display: flex;
+    justify-content: space-between;
+}

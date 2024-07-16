@@ -1,0 +1,11 @@
+.button {
+  padding: 5px 10px;
+  font-family: "Montserrat", sans-serif;
+  background-color: rgb(211, 211, 211);
+  border: 1px solid black;
+}
+
+.button:hover:enabled {
+  cursor: pointer;
+  background-color: rgb(190, 190, 190);
+}
