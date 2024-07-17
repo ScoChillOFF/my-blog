@@ -4,11 +4,23 @@
     border: 1px solid silver;
 }
 
-.createForm h3 {
+.createForm .headerContainer {
     margin-bottom: 20px; 
+}
+
+.createForm span {
+    font-weight: 600;
+    font-size: 24px;
+    cursor: pointer;
+    user-select: none;
 }
 
 .createForm div {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+}
+
+.notShow .headerContainer {
+    margin-bottom: 0;
 }
