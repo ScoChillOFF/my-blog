@@ -2,6 +2,7 @@ import asyncio
 import sys
 
 from fastapi import FastAPI, HTTPException, Query
+from fastapi.middleware.cors import CORSMiddleware
 
 from typing import Annotated
 
@@ -16,6 +17,16 @@ app = FastAPI()
 if sys.platform == "win32":
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 # ------------------------
+
+
+# Temp CORS solution
+app.add_middleware(
+  CORSMiddleware,
+  allow_origins=["*"],
+  allow_methods=["*"],
+  allow_headers=["*"]
+)
+# -------------------
 
 
 @app.get('/api/v1/ping')
