@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios"
 import TextInput from "./TextInput.jsx";
 import TextArea from "./TextArea.jsx";
 import Button from "../../../generic/Button.jsx";
@@ -11,13 +12,19 @@ const CreateArticleForm = () => {
   const [show, setShow] = useState(false);
   const isReadyToSubmit = title.length != 0 && content.length != 0;
 
-  function onCreateSubmit(event) {
+  async function sendArticleToServerAndUpdate(article) {
+    const response = await axios.post("http://127.0.0.1:8000/api/v1/articles", article);
+    return response.data;
+  }
+
+  async function onCreateSubmit(event) {
     event.preventDefault();
-    const article = {
+    let article = {
       title: title,
       content: content,
       tags: tags.length == 0 ? [] : tags.split(" "),
     };
+    article = await sendArticleToServerAndUpdate(article);
     setTitle("");
     setContent("");
     setTags("");
