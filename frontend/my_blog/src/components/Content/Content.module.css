@@ -3,3 +3,14 @@
     justify-content: space-between;
     padding: 40px;
 }
+
+.leftWrapper {
+    width: 100%;
+}
+
+.divider {
+    margin: 20px 0;
+    width: 100%;
+    height: 1px;
+    background-color: rgb(211, 211, 211);
+}

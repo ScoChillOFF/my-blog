@@ -1,12 +1,17 @@
 import React from "react";
 import Articles from "./Articles/Articles.jsx";
-import Tags from "./Tags/Tags.jsx";
-import styles from './Content.module.css'
+import CreateArticleForm from "./CreateArticleForm/CreateArticleForm.jsx";
+import Tags from "./FilterSection/FilterSection.jsx";
+import styles from "./Content.module.css";
 
 const Content = () => {
   return (
     <div className={styles.content}>
-      <Articles />
+      <div className={styles.leftWrapper}>
+        <CreateArticleForm />
+        <div className={styles.divider}></div>
+        <Articles />
+      </div>
       <Tags />
     </div>
   );

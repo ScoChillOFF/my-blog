@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios"
 import TextInput from "./TextInput.jsx";
 import TextArea from "./TextArea.jsx";
-import Button from "../../../generic/Button.jsx";
+import Button from "../../generic/Button.jsx";
 import styles from "./CreateArticleForm.module.css";
 
 const CreateArticleForm = () => {

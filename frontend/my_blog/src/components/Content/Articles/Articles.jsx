@@ -1,13 +1,8 @@
-import React from 'react'
-import styles from './Articles.module.css'
-import CreateArticleForm from './CreateArticle/CreateArticleForm.jsx'
+import React from "react";
+import styles from "./Articles.module.css";
 
 const Articles = () => {
-  return (
-    <div className={styles.articles}>
-      <CreateArticleForm />
-    </div>
-  )
-}
+  return <></>;
+};
 
-export default Articles
+export default Articles;
