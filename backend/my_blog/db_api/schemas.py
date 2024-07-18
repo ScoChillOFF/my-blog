@@ -11,7 +11,7 @@ class TagSubResponse(BaseModel):
 class TagResponse(BaseModel):
     id: str
     name: str
-    articles: list['ArticleResponse']
+    articles: list['ArticleSubResponse']
 
 
 class ArticleCreation(BaseModel):
@@ -34,7 +34,7 @@ class ArticleSubResponse(BaseModel):
     id: str
     title: str
     content: str
-    created_at: str
+    created_at: datetime
 
 
 class ArticleUpdating(BaseModel):

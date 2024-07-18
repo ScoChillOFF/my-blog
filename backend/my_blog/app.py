@@ -66,3 +66,9 @@ async def update_article(article_id: str, article_schema: schemas.ArticleUpdatin
     if not article:
         raise HTTPException(status_code=404, detail='not found')
     return article
+
+
+@app.get('/api/v1/tags', response_model=list[schemas.TagResponse])
+async def get_tags(db_session: DBSession) -> list[models.Tag]:
+    tags = await db.get_tags(db_session)
+    return tags

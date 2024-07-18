@@ -6,6 +6,13 @@ from datetime import datetime, timezone, timedelta
 from . import schemas, models
 
 
+async def get_tags(db_session: AsyncSession) -> list[models.Tag]:
+    query = sa.select(models.Tag)
+    result = await db_session.scalars(query)
+    tags = result.all()
+    return tags
+
+
 async def create_article(article_schema: schemas.ArticleCreation, db_session: AsyncSession) -> models.Article:
     tags = await get_tags_by_names(db_session, article_schema.tags)
     article = models.Article(title=article_schema.title, content=article_schema.content, tags=tags)
@@ -18,7 +25,6 @@ async def create_article(article_schema: schemas.ArticleCreation, db_session: As
 async def get_tags_by_names(db_session: AsyncSession, tag_names: list[str]) -> list[models.Tag]:
     query = sa.select(models.Tag).where(models.Tag.name.in_(tag_names))
     tags = (await db_session.scalars(query)).all()
-    print(tags)
     return tags
 
 
