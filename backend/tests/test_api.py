@@ -2,12 +2,11 @@ from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 import pytest
 from fastapi.testclient import TestClient
 
-from datetime import datetime, timedelta
-
 from my_blog.settings import settings
 from my_blog.db_api import models
 from my_blog import app
 from my_blog.dependencies import get_db_session
+from . import data as test_data
 
 
 engine = create_async_engine(settings.get_test_db_url())
@@ -20,60 +19,9 @@ async def get_db_and_data() -> None:
     async with engine.begin() as conn:
         await conn.run_sync(models.Base.metadata.drop_all)
         await conn.run_sync(models.Base.metadata.create_all)
-    data = get_pre_db_data()
-    await fill_db_with_data(data)
-    update_data(data)
-    return data
-
-
-def get_pre_db_data() -> dict[str, list]:
-    articles_data = [
-        {
-            "id": "test_article_1",
-            "title": "test_title_1",
-            "content": "test_content_1",
-            "created_at": datetime.now().astimezone(),
-        },
-        {
-            "id": "test_article_2",
-            "title": "test_title_2",
-            "content": "test_content_2",
-            "created_at": datetime.now().astimezone() - timedelta(days=1),
-        },
-        {
-            "id": "test_article_3",
-            "title": "test_title_3",
-            "content": "test_content_3",
-            "created_at": datetime.now().astimezone() - timedelta(days=7),
-        },
-    ]
-    tags_data = [
-        {"id": "test_tag_1", "name": "tag_name_1"},
-        {"id": "test_tag_2", "name": "tag_name_2"},
-    ]
-    return {"articles": articles_data, "tags": tags_data}
-
-
-async def fill_db_with_data(data) -> None:
     async with TestingSessionInstance() as session:
-        articles = [models.Article(**article_data) for article_data in data["articles"]]
-        tags = [models.Tag(**tag_data) for tag_data in data["tags"]]
-        articles[1].tags = [tags[0]]
-        articles[2].tags = [tags[0], tags[1]]
-        session.add_all([*articles, *tags])
-        await session.commit()
-
-
-def update_data(data) -> None:
-    articles_data = data["articles"]
-    tags_data = data["tags"]
-    articles_data[0]["tags"] = []
-    articles_data[1]["tags"] = [tags_data[0]]
-    articles_data[2]["tags"] = [tags_data[0], tags_data[1]]
-    for article in articles_data:
-        article["created_at"] = (
-            article["created_at"].isoformat().replace("+00:00", "+03:00")
-        )
+        res_data = await test_data.get_data_for_tests(session)
+    return res_data
 
 
 async def override_get_db_session():
@@ -181,3 +129,11 @@ def test_update_article(get_db_and_data):
     valid_article["content"] = "test_change_content"
     assert response.status_code == 200
     assert article == valid_article
+
+
+def test_get_tags(get_db_and_data):
+    data = get_db_and_data
+    response = client.get("/api/v1/tags")
+    tags = response.json()
+    assert response.status_code == 200
+    assert tags == data["tags"]
