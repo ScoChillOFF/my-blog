@@ -10,6 +10,8 @@ async def get_tags(db_session: AsyncSession) -> list[models.Tag]:
     query = sa.select(models.Tag)
     result = await db_session.scalars(query)
     tags = result.all()
+    for tag in tags:
+        tag.articles = sorted(tag.articles, key=lambda x: x.created_at, reverse=True)
     return tags
 
 
