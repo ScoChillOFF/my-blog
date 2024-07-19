@@ -5,4 +5,4 @@ const FilterSection = () => {
   return <div className={styles.filterSection}>Tags</div>;
 };
 
-export default Tags;
+export default FilterSection;
