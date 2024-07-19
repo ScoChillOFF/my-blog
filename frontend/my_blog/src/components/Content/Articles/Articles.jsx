@@ -17,6 +17,11 @@ const Articles = () => {
     setArticles(newArticles);
   }
 
+  function onUpdate(targetArticle) {
+    const newArticles = articles.map((article) => article.id == targetArticle.id ? targetArticle : article);
+    setArticles(newArticles);
+  }
+
   function onDelete(targetArticle) {
     const newArticles = articles.filter((article) => article.id != targetArticle.id);
     setArticles(newArticles);
@@ -29,7 +34,7 @@ const Articles = () => {
       <CreateArticleForm onCreate={onCreate} />
       <div className={styles.divider}></div>
       {articles.map(
-        (article) => <Article key={article.id} article={article} onDelete={onDelete} />
+        (article) => <Article key={article.id} article={article} onDelete={onDelete} onUpdate={onUpdate} />
       )}
     </>
   );

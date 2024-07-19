@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios"
-import TextInput from "./TextInput.jsx";
-import TextArea from "./TextArea.jsx";
+import TextInput from "../../../generic/TextInput.jsx";
+import TextArea from "../../../generic/TextArea.jsx";
 import Button from "../../../generic/Button.jsx";
 import styles from "./CreateArticleForm.module.css";
 
