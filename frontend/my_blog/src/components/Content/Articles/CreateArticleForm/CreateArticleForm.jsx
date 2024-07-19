@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import axios from "axios"
 import TextInput from "./TextInput.jsx";
 import TextArea from "./TextArea.jsx";
-import Button from "../../generic/Button.jsx";
+import Button from "../../../generic/Button.jsx";
 import styles from "./CreateArticleForm.module.css";
 
-const CreateArticleForm = () => {
+const CreateArticleForm = ({ onCreate }) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [tags, setTags] = useState("");
@@ -25,10 +25,10 @@ const CreateArticleForm = () => {
       tags: tags.length == 0 ? [] : tags.split(" "),
     };
     article = await sendArticleToServerAndUpdate(article);
+    onCreate(article);
     setTitle("");
     setContent("");
     setTags("");
-    console.log(article);
   }
 
   if (!show) {
