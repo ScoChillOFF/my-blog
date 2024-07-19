@@ -1,5 +1,16 @@
 .filterSection {
+    padding: 15px;
     margin-left: 40px;
     width: 17vw;
-    background-color: rgb(211, 211, 211);
+    background-color: rgb(240, 240, 240);
+    font-family: "Montserrat", sans-serif;
+    border: 1px solid rgb(211, 211, 211);
+}
+
+.filterSection form {
+    margin-bottom: 15px;
+}
+
+.filterSection form h3 {
+    margin-bottom: 15px;
 }

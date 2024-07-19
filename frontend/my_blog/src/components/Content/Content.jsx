@@ -36,6 +36,10 @@ const Content = () => {
     setArticles(newArticles);
   }
 
+  function onApply(newArticles) {
+    setArticles(newArticles);
+  }
+
   return (
     <div className={styles.content}>
       <div className={styles.leftWrapper}>
@@ -43,7 +47,7 @@ const Content = () => {
         <div className={styles.divider}></div>
         <Articles articles={articles} onDelete={onDelete} onUpdate={onUpdate} />
       </div>
-      <FilterSection />
+      <FilterSection onApply={onApply} />
     </div>
   );
 };

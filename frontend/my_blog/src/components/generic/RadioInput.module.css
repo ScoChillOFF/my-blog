@@ -1,0 +1,10 @@
+.radio {
+    font-family: "Montserrat", sans-serif;
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.radio input {
+    margin-right: 5px;
+}
