@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Button from "../../generic/Button";
 import styles from "./Articles.module.css";
 import Article from "./Article/Article";
 
@@ -12,12 +11,17 @@ const Articles = () => {
     setArticles(response.data);
   }
 
+  function onDelete(targetArticle) {
+    const newArticles = articles.filter((article) => article.id != targetArticle.id);
+    setArticles(newArticles);
+  }
+
   useEffect(() => {getArticlesFromServer()}, []);
 
   return (
     <>
       {articles.map(
-        (article) => <Article key={article.id} article={article} />
+        (article) => <Article key={article.id} article={article} onDelete={onDelete} />
       )}
     </>
   );
