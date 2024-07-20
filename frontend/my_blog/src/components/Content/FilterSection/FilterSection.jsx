@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import RadioInput from "../../generic/RadioInput";
+import CheckboxInput from "../../generic/CheckboxInput";
 import Button from "../../generic/Button";
 import styles from "./FilterSection.module.css";
 
 const FilterSection = ({ onApply }) => {
   const [daysLimit, setDaysLimit] = useState(null);
+  const [tags, setTags] = useState([]);
+
+  useEffect(() => {getTagsFromServer()}, []);
 
   async function applyFilters() {
     console.log("Applied filters");
@@ -15,6 +19,11 @@ const FilterSection = ({ onApply }) => {
     }
     const response = await axios.get(url);
     onApply(response.data);
+  }
+
+  async function getTagsFromServer() {
+    const response = await axios.get("http://127.0.0.1:8000/api/v1/tags");
+    setTags(response.data);
   }
 
   return (
@@ -56,6 +65,18 @@ const FilterSection = ({ onApply }) => {
           selectedValue={daysLimit}
           onChange={() => setDaysLimit(30)}
         />
+      </form>
+      <form className={styles.tagsFilter}>
+        <h3>By tags</h3>
+        {tags.map((tag) => (
+          <CheckboxInput
+            label={tag.name}
+            name="tags-filter"
+            value={tag.name}
+            key={tag.id}
+            onChange={() => {}}
+          />
+        ))}
       </form>
       <Button text="Apply" onClick={applyFilters} />
     </div>

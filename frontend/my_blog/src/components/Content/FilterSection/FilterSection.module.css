@@ -2,6 +2,7 @@
     padding: 15px;
     margin-left: 40px;
     width: 17vw;
+    height: fit-content;
     background-color: rgb(240, 240, 240);
     font-family: "Montserrat", sans-serif;
     border: 1px solid rgb(211, 211, 211);
