@@ -1,30 +1,43 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import RadioInput from "../../generic/RadioInput";
 import CheckboxInput from "../../generic/CheckboxInput";
 import Button from "../../generic/Button";
 import styles from "./FilterSection.module.css";
 
-const FilterSection = ({ onApply }) => {
+const FilterSection = ({ onApply, tags }) => {
   const [daysLimit, setDaysLimit] = useState(null);
-  const [tags, setTags] = useState([]);
+  const [selectedTagNames, setSelectedTagNames] = useState([]);
 
-  useEffect(() => {getTagsFromServer()}, []);
-
-  async function applyFilters() {
+  async function getFilteredArticles() {
     console.log("Applied filters");
     let url = "http://127.0.0.1:8000/api/v1/articles?";
     if (daysLimit != null) {
       url += "days_limit=" + daysLimit;
     }
+    if (selectedTagNames != []) {
+      for (let tagName of selectedTagNames) {
+        url += "&tags=" + tagName
+      }
+    }
     const response = await axios.get(url);
-    onApply(response.data);
+    return response.data;
   }
 
-  async function getTagsFromServer() {
-    const response = await axios.get("http://127.0.0.1:8000/api/v1/tags");
-    setTags(response.data);
+  async function applyFilters() {
+    const filteredArticles = await getFilteredArticles();
+    onApply(filteredArticles, selectedTagNames);
   }
+
+  function onTagSelect(targetTagName) {
+    const newSelectedTagNames = [...selectedTagNames, targetTagName];
+    setSelectedTagNames(newSelectedTagNames);
+  };
+
+  function onTagUnselect(targetTagName) {
+    const newSelectedTagNames = selectedTagNames.filter((tagName) => tagName != targetTagName);
+    setSelectedTagNames(newSelectedTagNames);
+  };
 
   return (
     <div className={styles.filterSection}>
@@ -74,7 +87,8 @@ const FilterSection = ({ onApply }) => {
             name="tags-filter"
             value={tag.name}
             key={tag.id}
-            onChange={() => {}}
+            onSelect={onTagSelect}
+            onUnselect={onTagUnselect}
           />
         ))}
       </form>

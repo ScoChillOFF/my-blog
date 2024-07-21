@@ -1,13 +1,17 @@
 import React, { useState } from "react";
 import styles from "./CheckboxInput.module.css"
 
-const CheckboxInput = ({ label, name, value, onChange }) => {
+const CheckboxInput = ({ label, name, value, onSelect, onUnselect }) => {
   const [isChecked, setIsChecked] = useState(false);
 
-  async function handleChange() {
+  function handleChange() {
+    if (!isChecked) {
+      onSelect(value);
+    } else {
+      onUnselect(value);
+    }
     setIsChecked(!isChecked);
-    await onChange();
-  }
+  };
 
   return (
     <label className={styles.checkbox}>

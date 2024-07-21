@@ -7,19 +7,39 @@ import styles from "./Content.module.css";
 
 const Content = () => {
   const [articles, setArticles] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [appliedTagNames, setAppliedTagNames] = useState([]);
+
+  useEffect(() => {
+    getArticlesFromServer();
+    getTagsFromServer();
+  }, []);
 
   async function getArticlesFromServer() {
     const response = await axios.get("http://127.0.0.1:8000/api/v1/articles");
     setArticles(response.data);
   }
 
-  useEffect(() => {
-    getArticlesFromServer();
-  }, []);
+  async function getTagsFromServer() {
+    const response = await axios.get("http://127.0.0.1:8000/api/v1/tags");
+    setTags(response.data);
+  }
 
-  function onCreate(targetArticle) {
-    const newArticles = [targetArticle, ...articles];
-    setArticles(newArticles);
+  async function onCreate(targetArticle) {
+    await getTagsFromServer();
+    if (appliedTagNames != [] && isAnyTagApplied(targetArticle)) {
+      const newArticles = [targetArticle, ...articles];
+      setArticles(newArticles);
+    }
+  }
+
+  function isAnyTagApplied(article) {
+    for (let tag of article.tags) {
+      if (appliedTagNames.includes(tag.name)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   function onDelete(targetArticle) {
@@ -36,8 +56,9 @@ const Content = () => {
     setArticles(newArticles);
   }
 
-  function onApply(newArticles) {
+  function onApply(newArticles, selectedTagNames) {
     setArticles(newArticles);
+    setAppliedTagNames(selectedTagNames);
   }
 
   return (
@@ -47,7 +68,7 @@ const Content = () => {
         <div className={styles.divider}></div>
         <Articles articles={articles} onDelete={onDelete} onUpdate={onUpdate} />
       </div>
-      <FilterSection onApply={onApply} />
+      <FilterSection onApply={onApply} tags={tags} />
     </div>
   );
 };
