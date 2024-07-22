@@ -6,7 +6,7 @@ from my_blog.settings import settings
 from my_blog.db_api import models
 from my_blog import app
 from my_blog.dependencies import get_db_session
-from . import data as test_data
+from .data import Data
 
 
 engine = create_async_engine(settings.get_test_db_url())
@@ -19,9 +19,10 @@ async def get_db_and_data() -> None:
     async with engine.begin() as conn:
         await conn.run_sync(models.Base.metadata.drop_all)
         await conn.run_sync(models.Base.metadata.create_all)
+    data = Data()
     async with TestingSessionInstance() as session:
-        res_data = await test_data.get_data_for_tests(session)
-    return res_data
+        await data.fill_db(session)
+    return data.get_data_for_tests()
 
 
 async def override_get_db_session():
