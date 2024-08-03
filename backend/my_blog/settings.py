@@ -12,10 +12,10 @@ class Settings(BaseSettings):
     test_db_name: str = 'test_db'
 
     def get_db_url(self) -> str:
-        return f'postgresql+psycopg://{self.db_user}:{self.db_password}@{self.db_host}/{self.db_name}'
+        return f'postgresql+psycopg://{self.db_user}:{self.db_password}@{self.db_host}:{self.db_port}/{self.db_name}'
     
     def get_test_db_url(self) -> str:
-        return f'postgresql+psycopg://{self.db_user}:{self.db_password}@{self.db_host}/{self.test_db_name}'
+        return f'postgresql+psycopg://{self.db_user}:{self.db_password}@{self.db_host}:{self.db_port}/{self.test_db_name}'
 
     model_config = SettingsConfigDict(env_file='.env')
 
