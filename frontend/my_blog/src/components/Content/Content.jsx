@@ -27,7 +27,7 @@ const Content = () => {
 
   async function onCreate(targetArticle) {
     await getTagsFromServer();
-    if (appliedTagNames != [] && isAnyTagApplied(targetArticle)) {
+    if (appliedTagNames.length == 0 || isAnyTagApplied(targetArticle)) {
       const newArticles = [targetArticle, ...articles];
       setArticles(newArticles);
     }
