@@ -1,0 +1,26 @@
+services:
+  db:
+    image: "postgres:16-bookworm"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=my_blog
+  server:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=my_blog
+    restart: on-failure
+    depends_on:
+      - db
+  web:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - server
